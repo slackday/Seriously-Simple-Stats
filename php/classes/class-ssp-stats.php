@@ -219,7 +219,7 @@ class Stats {
 
 		// Load necessary javascript for charts
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10, 1 );
-		add_action( 'admin_print_scripts', array( $this, 'chart_data' ), 30 );
+	 	add_action( 'admin_print_scripts-podcast_page_podcast_stat', array( $this, 'chart_data' ), 30 );	
 
 		// Load admin CSS
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ), 10, 1 );
