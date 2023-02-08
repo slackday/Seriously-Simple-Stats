@@ -339,114 +339,120 @@ class Stats {
 	 *
 	 * @param $post
 	 */
-	public function stats_meta_box_content ( $post ) {
+	public function stats_meta_box_content( $post ) {
 
-		if( ! isset( $post->ID ) ) {
+		if ( ! isset( $post->ID ) ) {
 			return;
 		}
 
-		$stats = $this->get_episode_stats( $post->ID, array( 'ip_address', 'referrer') );
+		$stats = $this->get_episode_stats( $post->ID, array( 'ip_address', 'referrer' ) );
 
 		$total_downloads = count( $stats );
-
 		$html = '';
-		if( $total_downloads ) {
 
-			$html .= '<p class="episode-stat-data total-downloads">' . __( 'Total listens', 'seriously-simple-stats' ) . ': <b>' . $total_downloads . '</b></p>';
-
-			$itunes = $stitcher = $overcast = $pocketcasts = $direct = $new_window = $player = $android = $podcast_addict = $playerfm = $google_play = $unknown = 0;
-
-			foreach( $stats as $stat ) {
-				$listeners[ $stat->ip_address ] = $stat->ip_address;
-
-				switch( $stat->referrer ) {
-					case 'itunes':
-						++$itunes;
-					break;
-					case 'stitcher':
-						++$stitcher;
-					break;
-					case 'overcast':
-						++$overcast;
-					break;
-					case 'pocketcasts':
-						++$pocketcasts;
-					break;
-					case 'download':
-						++$direct;
-					break;
-					case 'new_window':
-						++$new_window;
-					break;
-					case 'player':
-						++$player;
-					break;
-					case 'android':
-						++$android;
-					case 'podcast_addict':
-						++$podcast_addict;
-					case 'playerfm':
-						++$playerfm;
-					case 'google_play':
-						++$google_play;
-					default:
-						++$unknown;
-					break;
-				}
-			}
-
-			$total_listeners = count( $listeners );
-
-			$html .= '<p class="episode-stat-data total-listeners">' . __( 'Total listeners', 'seriously-simple-stats' ) . ': <b>' . $total_listeners . '</b></p>';
-			$html .= '<p class="episode-stat-data sources">' . __( 'Listening sources', 'seriously-simple-stats' ) . ':</p>';
-			$html .= '<ul class="sources-list">';
-				if( $itunes ) {
-					$html .= '<li class="itunes">' . __( 'iTunes', 'seriously-simple-stats' ) . ': <b>' . $itunes . '</b></li>';
-				}
-				if( $stitcher ) {
-					$html .= '<li class="stitcher">' . __( 'Stitcher', 'seriously-simple-stats' ) . ': <b>' . $stitcher . '</b></li>';
-				}
-				if( $overcast ) {
-					$html .= '<li class="overcast">' . __( 'Overcast', 'seriously-simple-stats' ) . ': <b>' . $overcast . '</b></li>';
-				}
-				if( $pocketcasts ) {
-					$html .= '<li class="pocketcasts">' . __( 'Pocket Casts', 'seriously-simple-stats' ) . ': <b>' . $pocketcasts . '</b></li>';
-				}
-				if( $direct ) {
-					$html .= '<li class="direct">' . __( 'Direct download', 'seriously-simple-stats' ) . ': <b>' . $direct . '</b></li>';
-				}
-				if( $new_window ) {
-					$html .= '<li class="new_window">' . __( 'Played in new window', 'seriously-simple-stats' ) . ': <b>' . $new_window . '</b></li>';
-				}
-				if( $player ) {
-					$html .= '<li class="player">' . __( 'Audio player', 'seriously-simple-stats' ) . ': <b>' . $player . '</b></li>';
-				}
-				// Commented out for now, could be included in the future
-				/*if( $android ){
-					$html .= '<li class="android">' . __( 'Android App', 'seriously-simple-stats' ) . ': <b>' . $android . '</b></li>';
-				}*/
-				if( $podcast_addict ){
-					$html .= '<li class="podcast_addict">' . __( 'Podcast Addict', 'seriously-simple-stats' ) . ': <b>' . $podcast_addict . '</b></li>';
-				}
-				if( $playerfm ){
-					$html .= '<li class="playerfm">' . __( 'Player FM', 'seriously-simple-stats' ) . ': <b>' . $playerfm . '</b></li>';
-				}
-				// Commented out for now, could be used in the future
-				/*if( $google_play ){
-					$html .= '<li class="google_play">' . __( 'Google Play', 'seriously-simple-stats' ) . ': <b>' . $google_play . '</b></li>';
-				}*/
-				if( $unknown ) {
-					$html .= '<li class="unknown">' . __( 'Other', 'seriously-simple-stats' ) . ': <b>' . $unknown . '</b></li>';
-				}
-			$html .= '</ul>';
-
-			$html .= '<p>' . sprintf( __( '%1$sSee more detail %2$s%3$s', 'seriously-simple-stats' ), '<a href="' . admin_url( 'edit.php?post_type=podcast&page=podcast_stats&filter=episode&episode=' . $post->ID ) . '">', '&raquo;', '</a>' ) . '<p>';
-		} else {
+		if ( ! $total_downloads ) {
 			$html .= '<div class="no-activity">' . "\n";
-				$html .= '<p class="smiley"></p>' . "\n";
-				$html .= '<p>' . __( 'No stats for this episode yet!', 'seriously-simple-stats' ) . '</p>' . "\n";
+			$html .= '<p class="smiley"></p>' . "\n";
+			$html .= '<p>' . __( 'No stats for this episode yet!', 'seriously-simple-stats' ) . '</p>' . "\n";
 			$html .= '</div>' . "\n";
+
+			echo $html;
+			return;
 		}
+
+		$html .= '<p class="episode-stat-data total-downloads">' . __( 'Total listens', 'seriously-simple-stats' ) . ': <b>' . $total_downloads . '</b></p>';
+
+		$itunes = $stitcher = $overcast = $pocketcasts = $direct = $new_window = $player = $android = $podcast_addict = $playerfm = $google_play = $unknown = 0;
+
+		foreach ( $stats as $stat ) {
+			$listeners[ $stat->ip_address ] = $stat->ip_address;
+
+			switch ( $stat->referrer ) {
+				case 'itunes':
+					++ $itunes;
+					break;
+				case 'stitcher':
+					++ $stitcher;
+					break;
+				case 'overcast':
+					++ $overcast;
+					break;
+				case 'pocketcasts':
+					++ $pocketcasts;
+					break;
+				case 'download':
+					++ $direct;
+					break;
+				case 'new_window':
+					++ $new_window;
+					break;
+				case 'player':
+					++ $player;
+					break;
+				case 'android':
+					++ $android;
+					break;
+				case 'podcast_addict':
+					++ $podcast_addict;
+					break;
+				case 'playerfm':
+					++ $playerfm;
+					break;
+				case 'google_play':
+					++ $google_play;
+					break;
+				default:
+					++ $unknown;
+					break;
+			}
+		}
+
+		$total_listeners = count( $listeners );
+
+		$html .= '<p class="episode-stat-data total-listeners">' . __( 'Total listeners', 'seriously-simple-stats' ) . ': <b>' . $total_listeners . '</b></p>';
+		$html .= '<p class="episode-stat-data sources">' . __( 'Listening sources', 'seriously-simple-stats' ) . ':</p>';
+		$html .= '<ul class="sources-list">';
+		if ( $itunes ) {
+			$html .= '<li class="itunes">' . __( 'iTunes', 'seriously-simple-stats' ) . ': <b>' . $itunes . '</b></li>';
+		}
+		if ( $stitcher ) {
+			$html .= '<li class="stitcher">' . __( 'Stitcher', 'seriously-simple-stats' ) . ': <b>' . $stitcher . '</b></li>';
+		}
+		if ( $overcast ) {
+			$html .= '<li class="overcast">' . __( 'Overcast', 'seriously-simple-stats' ) . ': <b>' . $overcast . '</b></li>';
+		}
+		if ( $pocketcasts ) {
+			$html .= '<li class="pocketcasts">' . __( 'Pocket Casts', 'seriously-simple-stats' ) . ': <b>' . $pocketcasts . '</b></li>';
+		}
+		if ( $direct ) {
+			$html .= '<li class="direct">' . __( 'Direct download', 'seriously-simple-stats' ) . ': <b>' . $direct . '</b></li>';
+		}
+		if ( $new_window ) {
+			$html .= '<li class="new_window">' . __( 'Played in new window', 'seriously-simple-stats' ) . ': <b>' . $new_window . '</b></li>';
+		}
+		if ( $player ) {
+			$html .= '<li class="player">' . __( 'Audio player', 'seriously-simple-stats' ) . ': <b>' . $player . '</b></li>';
+		}
+		// Commented out for now, could be included in the future
+		if( $android ){
+			$html .= '<li class="android">' . __( 'Android App', 'seriously-simple-stats' ) . ': <b>' . $android . '</b></li>';
+		}
+		if ( $podcast_addict ) {
+			$html .= '<li class="podcast_addict">' . __( 'Podcast Addict', 'seriously-simple-stats' ) . ': <b>' . $podcast_addict . '</b></li>';
+		}
+		if ( $playerfm ) {
+			$html .= '<li class="playerfm">' . __( 'Player FM', 'seriously-simple-stats' ) . ': <b>' . $playerfm . '</b></li>';
+		}
+		// Commented out for now, could be used in the future
+		/*if( $google_play ){
+			$html .= '<li class="google_play">' . __( 'Google Play', 'seriously-simple-stats' ) . ': <b>' . $google_play . '</b></li>';
+		}*/
+		if ( $unknown ) {
+			$html .= '<li class="unknown">' . __( 'Other', 'seriously-simple-stats' ) . ': <b>' . $unknown . '</b></li>';
+		}
+		$html .= '</ul>';
+
+		$html .= '<p>' . sprintf( __( '%1$sSee more detail %2$s%3$s', 'seriously-simple-stats' ), '<a href="' . admin_url( 'edit.php?post_type=podcast&page=podcast_stats&filter=episode&episode=' . $post->ID ) . '">', '&raquo;', '</a>' ) . '<p>';
 
 		echo $html;
 	}
@@ -705,16 +711,13 @@ class Stats {
 		echo $html;
 	}
 
-
-
-
-
-
-
 	private function daily_stat ( $number = '', $description = '' ) {
-
 		$html = '<div class="overview-stat">' . "\n";
-			$html .= '<div class="stat-total">' . $number . '</div>' . "\n";
+		    $classes = 'stat-total';
+            if ( $number > 999 ) {
+                $classes .= ' stat-font-small';
+            }
+			$html .= sprintf('<div class="%s">', $classes) . $number . '</div>' . "\n";
 			$html .= '<div class="stat-description">' . $description . '</div>' . "\n";
 		$html .= '</div>' . "\n";
 
@@ -925,7 +928,7 @@ class Stats {
 	 */
 	private function generate_chart ( $type = '', $title = '', $columns = array(), $data = array(), $target = '', $height = 400, $width = '100%' ) {
 
-		if( ! $type || ! $target || ! is_array( $columns )  || ! is_array( $data ) ) {
+		if( ! $type || ! $target || ! is_array( $columns )  || ! is_array( $data ) || ! wp_script_is( 'google-charts' ) ) {
 			return;
 		}
 
@@ -984,6 +987,8 @@ class Stats {
 		?>
 		<script type="text/javascript">
 
+            google.charts.load('current', {packages: ['corechart']});
+
 			// Set a callback to run when the Google Visualization API is loaded
 			google.setOnLoadCallback(draw_chart_<?php echo $chartid; ?>);
 
@@ -1025,11 +1030,15 @@ class Stats {
 	 */
 	public function admin_enqueue_scripts ( $hook = '' ) {
 
-		//index.php added to accommodate dashboard widget chart
-		if( 'podcast_page_podcast_stats' == $hook || 'index.php' == $hook ) {
+		global $typenow;
+
+		// index.php added to accommodate dashboard widget chart
+		// 'podcast' == $typenow added to serve right side panel with podcast stats in podcast edition mode
+		if( 'podcast_page_podcast_stats' === $hook || 'index.php' === $hook || 'podcast' === $typenow ) {
 
 			// Include Google Charts scripts
-			wp_enqueue_script( 'google-charts', "//www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}", array(), $this->_version, false );
+			wp_register_script( 'google-charts', "https://www.gstatic.com/charts/loader.js", array(), $this->_version, false );
+			wp_enqueue_script( 'google-charts' );
 
 			// Load custom scripts
 			wp_register_script( $this->_token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version );
@@ -1157,9 +1166,9 @@ class Stats {
 	 * @return  void
 	 */
 	public function add_dashboard_widget(){
-
-		add_meta_box( 'ssp_stats_dashboard_widget', __('Seriously Simple Stats - Overview', 'seriously-simple-stats' ), array( $this, 'dashboard_widget_callback' ), 'dashboard', 'normal', 'high' );
-
+		if ( current_user_can( 'manage_podcast' ) ) {
+			add_meta_box( 'ssp_stats_dashboard_widget', __('Seriously Simple Stats - Overview', 'seriously-simple-stats' ), array( $this, 'dashboard_widget_callback' ), 'dashboard', 'normal', 'high' );
+		}
 	}
 
 	/**

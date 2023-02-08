@@ -2,8 +2,8 @@
 Contributors: PodcastMotor, psykro, simondowdles, hlashbrooke, seriouspodcaster
 Tags: seriously simple podcasting, stats, statistics, listeners, analytics, podcast, podcasting, ssp, free, add-ons, extensions, addons
 Requires at least: 4.4
-Tested up to: 5.1.1
-Stable tag: 1.2.4
+Tested up to: 5.5
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,38 @@ Note that Stitcher download stats are not currently possible to gather accuratel
 Yes. This plugin uses the [Crawler Detect](https://github.com/JayBizzle/Crawler-Detect) library to make sure that crawlers/bots are not recorded as listens.
 
 == Changelog ==
+
+= 1.3.0 =
+* 2021-03-24
+* [FIX] Fixes a style bug when there is a big number of listens
+* [UPDATE] Added development npm dependencies
+
+= 1.2.10 =
+* 2020-12-21
+* [FIX] Fixes a bug in the per episode stats meta box
+* [UPDATE] Updated crawler detect library to version 1.2.103
+
+= 1.2.9 =
+* 2020-07-07
+* [FIX] Fixes a JavaScript bug related to the Google Charts libraries, when loading regular admin pages (props [lrynek](https://github.com/lrynek))
+
+= 1.2.8 =
+* 2020-06-19
+* [FIX] Fixes a bug in the loading of the Google Charts libraries
+
+= 1.2.7 =
+* 2020-05-25
+* [UPDATE] Updated crawler detect library to version 1.2.95
+
+= 1.2.6 =
+* 2019-12-20
+* [UPDATE] Updated crawler detect library
+
+= 1.2.5 =
+* 2018-08-13
+* [FIX] Fixed a bug in the All episode stats pagination (props [wudanbal](https://github.com/wudanbal))
+* [UPDATE] Default sorting for All episode stats set to date (props [wudanbal](https://github.com/wudanbal))
+* [UPDATE] Date display field uses WordPress Date Format setting, to display date (props [wudanbal](https://github.com/wudanbal))
 
 = 1.2.4 =
 * 2018-07-31
